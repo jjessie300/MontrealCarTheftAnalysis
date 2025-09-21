@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montreal Car Thefts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    
+<body class="bg-gray-50 font-sans">
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="test-2xl font bold text-gray-900">Montreal Car Theft Map</h1>
+                    <p class="text-gray-600 text-sm">Real-time incidents and crime statistics</p>
+                </div> 
+                <nav class="flex items-center space-x-6">
+                    <!-- add action? -->
+                    <button onclick="showSection('map')" class="nav-btn text-blue-600 font-medium border-b-2 border-blue-600">Map</button>
+                    <button onclick="showSection('recent')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">Recent Incidents</button>
+                    <button onclick="showSection('analytics')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">Analytics</button>
+                    <button onclick="showSection('safety')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">Safety Tips</button>
+                    <button onclick="showSection('about')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">About</button>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-red-600" id="totalThefts">{{ total }}</div>
+                        <div class="text-xs text-gray-500">Total incidents (2025)</div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </header>
+
+
+    <div class="flex h-[calc(100vh-4rem)]">
+        <div class="w-80 bg-white shadow-lg border-r overflow-y-auto">
+            <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
+
+                <form action="/filter_map" method="GET">
+                    <!-- Year Filter -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                        <select id="timeFilter" name="year" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" disabled selected>Select year</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                        </select>
+                    </div>
+
+                    <!-- Month Filter -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                        <select id="boroughFilter" name="month" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" disabled selected>Select month</option>
+                            <option value="all_months">All months</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+
+                    <!--Time of day filter-->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time of Day</label>
+                        <select id="boroughFilter" name="day" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" disabled selected>Select Time of Day</option>
+                            <option value="all">All</option>
+                            <option value="jour">Day</option>
+                            <option value="nuit">Night</option>
+                        </select>
+                    </div>
+                    
+                    <!--Borough outlines-->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Borough outline</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="borough_outline" class="borough-filter rounded text-blue-600" value="show_borough">
+                                <span class="ml-2 text-sm">Show Boroughs</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border-t">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">Apply Filters</button>
+                    </div>
+                
+                </form>
+
+
+            </div>
+        </div> 
+        
+        <!--add map-->
+        <div class="flex-1 h-full"></div>
+            <iframe src="{{ url_for('static', filename='map.html') }}" width="100%" height="650px" style="border:none"></iframe>
+        </div>
+
+
+    </div>
+
+    
+
+</body>
