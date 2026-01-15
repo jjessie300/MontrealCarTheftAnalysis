@@ -1,10 +1,11 @@
 from flask import Flask, render_template, url_for, request
 import pandas as pd 
 import json 
-import data
+import data, cache 
 
 app = Flask(__name__)
 
+cache.fetch_csv() 
 
 @app.route('/')
 def home(): 

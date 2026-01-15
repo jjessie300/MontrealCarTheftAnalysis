@@ -3,7 +3,7 @@ import json
 
 
 # Load csv file 
-df = pd.read_csv("actes-criminels.csv")
+df = pd.read_csv(".cache/actes-criminels.csv")
 
 # Keep only motor vehicule theft 
 df = df[df['CATEGORIE'] == 'Vol de véhicule à moteur']
