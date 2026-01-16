@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Montreal Car Thefts</title>
 
     <!-- Tailwind -->
@@ -33,105 +33,166 @@
             width: 100%;
         }
     </style>
-
 </head>
 
+    
 <body class="bg-gray-50 font-sans">
-
     <header class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Montreal Car Theft Map</h1>
-                <p class="text-gray-600 text-sm">Real-time incidents and crime statistics</p>
-            </div>
-            <div class="text-right">
-                <div class="text-2xl font-bold text-red-600" id="totalThefts">
-                    {{ total }}
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="test-2xl font bold text-gray-900">Montreal Car Theft Map</h1>
+                    <p class="text-gray-600 text-sm">Real-time incidents and crime statistics</p>
+                </div> 
+                <nav class="flex items-center space-x-6">
+                    <!-- add action? -->
+                    <button onclick="showSection('map')" class="nav-btn text-blue-600 font-medium border-b-2 border-blue-600">Map</button>
+                    <button onclick="showSection('analytics')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">Analytics</button>
+                    <button onclick="showSection('report')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">Report Incident</button>
+                    <button onclick="showSection('about')" class="nav-btn text-gray-600 hover:text-blue-600 transition-colors">About</button>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-red-600" id="totalThefts">{{ total }}</div>
+                        <div class="text-xs text-gray-500">Total incidents (2026)</div>
+                    </div>
                 </div>
-                <div class="text-xs text-gray-500">Total incidents (2025)</div>
-            </div>
+            </div> 
         </div>
     </header>
 
-    <div class="flex h-[calc(100vh-4rem)]">
+    <div id="map" class="section">
+        <div class="flex h-[calc(100vh-4rem)]">
+            <div class="w-80 bg-white shadow-lg border-r overflow-y-auto">               
+                <div class="p-4 border-b">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
 
-        <!-- Sidebar -->
-        <div class="w-80 bg-white shadow-lg border-r overflow-y-auto">
-            <div class="p-4 border-b">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
+                    <form id="filter-form" method="GET">
+                        <!-- Year Filter -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                            <select id="timeFilter" name="year" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select year</option>
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                            </select>
+                        </div>
 
-                <form id="filter-form">
+                        <!-- Month Filter -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                            <select id="boroughFilter" name="month" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select month</option>
+                                <option value="all_months">All months</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
 
-                    <!-- Year -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Year</label>
-                        <select name="year" class="w-full p-2 border rounded-md">
-                            <option value="" disabled selected>Select year</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                            <option value="2015">2015</option>
-                        </select>
-                    </div>
+                        <!--Time of day filter-->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Time of Day</label>
+                            <select id="boroughFilter" name="day" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select Time of Day</option>
+                                <option value="all">All</option>
+                                <option value="jour">Day</option>
+                                <option value="nuit">Night</option>
+                            </select>
+                        </div>
+                        
+                        <!--Borough outlines-->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Borough outline</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="borough_outline" class="borough-filter rounded text-blue-600" value="show_borough">
+                                    <span class="ml-2 text-sm">Show Boroughs</span>
+                                </label>
+                            </div>
+                        </div>
 
-                    <!-- Month -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Month</label>
-                        <select name="month" class="w-full p-2 border rounded-md">
-                            <option value="" disabled selected>Select month</option>
-                            <option value="all_months">All months</option>
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
+                        <button type="button" onclick="applyFilters()" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition">
+                            Apply Filters
+                        </button>
+ 
+                    </form>
 
-                    <!-- Time of day -->
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Time of Day</label>
-                        <select name="day" class="w-full p-2 border rounded-md">
-                            <option value="" disabled selected>Select Time of Day</option>
-                            <option value="all">All</option>
-                            <option value="jour">Day</option>
-                            <option value="nuit">Night</option>
-                        </select>
-                    </div>
-
-                    <button
-                        type="button"
-                        onclick="applyFilters()"
-                        class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition"
-                    >
-                        Apply Filters
-                    </button>
-
-                </form>
-            </div>
+                </div>
+            </div> 
+                <!-- Map -->
+                <div id="mtl-map" class="flex-1">
+                    <script src="{{ url_for('static', filename='map.js') }}"></script>
+                </div>
         </div>
-
-        <!-- Map -->
-        <div id="leaflet-map" class="flex-1">
-            <script src="{{ url_for('static', filename='map.js') }}"></script>
-        </div>
-        
     </div>
 
+    <div id="analytics" class="section hidden">
+        <h2 class="text-2xl font-bold p-4">Analytics</h2>
+        <p class="px-4 text-gray-700">Here you can display the most recent car theft reports and charts.</p> 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-white p-6 ml-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-bold pb-1">Recent incidents</h3>
+                <p class="text-gray-700">Last 7 days: {{ stats.last_7_days }}</p>
+                <p class="text-gray-700">Last 30 days: {{ stats.last_30_days }}</p>
+                <p class="text-gray-700">Last 90 days: {{ stats.last_90_days }}</p>
+            </div>
+            <div class="bg-white p-6 mr-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                <p class="text-gray-700">Percent increase/decrease compared to last month</p>
+            </div>
+            <div class="bg-white p-6 ml-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                <p id="vulnerable-season" class="text-gray-700"></p>
+            </div>
+            <div class="bg-white p-6 mr-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                <p class="text-gray-700">Most vulnerable borough</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="report" class="section hidden">
+        <h2 class="text-2xl font-bold p-4">Incident Reports</h2>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6 mx-4">
+            <h3 class="text-xl font-semibold mb-4">File a Report</h3>
+            <form id="report-form"> 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <input name="brand" type="text" placeholder="Vehicle Brand" class="p-3 border border-gray-300 rounded-md">
+                    <input name="model" type="text" placeholder="Vehicle Model" class="p-3 border border-gray-300 rounded-md">
+                    <input name="incident_date" type="date" class="p-3 border border-gray-300 rounded-md">
+                </div>
+                <button type="button" onclick="submitReport()" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors">Submit Report</button>
+                <script src="{{ url_for('static', filename='main.js') }}"></script>
+            </form>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6 mx-4">
+            <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold mb-4">Most targeted vehicle</h3>
+            <button id="toggleTableBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"> Show Vehicles Table </button>
+        </div>
+    </div>
+
+    <!--check if i need this twice-->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+    
 </body>
-</html>
+
+
